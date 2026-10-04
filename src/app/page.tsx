@@ -1,69 +1,80 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+type Resultado = { score: number; classificacao: string };
 
 export default function Home() {
+  const [enviando, setEnviando] = useState(false);
+  const [erro, setErro] = useState("");
+  const [ok, setOk] = useState<Resultado | null>(null);
+
+  async function enviar(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const dados = Object.fromEntries(new FormData(form));
+    setEnviando(true);
+    setErro("");
+    try {
+      const r1 = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados),
+      });
+      if (!r1.ok) throw new Error("Confira os campos e tente novamente.");
+      const lead = await r1.json();
+      const r2 = await fetch(`/api/analisar/${lead.id}`, { method: "POST" });
+      if (!r2.ok) throw new Error("Lead salvo, mas a análise falhou. Reanalise pelo painel.");
+      setOk(await r2.json());
+      form.reset();
+    } catch (err) {
+      setErro(err instanceof Error ? err.message : "Erro inesperado");
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  const campo = "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/30";
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="mx-auto max-w-xl px-5 py-12">
+      <h1 className="text-3xl font-bold tracking-tight text-slate-900">Fale com a gente</h1>
+      <p className="mt-2 text-slate-600">Conte o que você precisa e respondemos o quanto antes.</p>
+
+      <form onSubmit={enviar} className="mt-8 space-y-4">
+        <label className="block text-sm font-medium text-slate-700">Nome
+          <input name="nome" required className={campo} />
+        </label>
+        <label className="block text-sm font-medium text-slate-700">E-mail
+          <input name="email" type="email" required className={campo} />
+        </label>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block text-sm font-medium text-slate-700">Empresa
+            <input name="empresa" className={campo} />
+          </label>
+          <label className="block text-sm font-medium text-slate-700">Segmento
+            <input name="segmento" placeholder="Ex.: varejo, clínica" className={campo} />
+          </label>
+        </div>
+        <label className="block text-sm font-medium text-slate-700">Mensagem
+          <textarea name="mensagem" required rows={5} className={campo} />
+        </label>
+        <button
+          disabled={enviando}
+          className="w-full rounded-lg bg-teal-700 px-4 py-2.5 font-semibold text-white hover:bg-teal-800 disabled:opacity-60"
+        >
+          {enviando ? "Enviando e analisando..." : "Enviar mensagem"}
+        </button>
+        {erro && <p role="alert" className="text-sm text-red-700">{erro}</p>}
+        {ok && (
+          <p role="status" className="rounded-lg bg-teal-50 p-3 text-sm text-teal-900">
+            Mensagem enviada! Lead classificado como <b>{ok.classificacao}</b> (nota {ok.score}).
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        )}
+      </form>
+
+      <Link href="/painel" className="mt-8 inline-block text-sm text-teal-800 underline">Ir para o painel do vendedor</Link>
+    </main>
   );
 }
