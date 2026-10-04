@@ -1,11 +1,11 @@
 # LeadScore IA
 
-Qualificador inteligente de leads para pequenas empresas. O lead preenche um formulário, a IA avalia o potencial de compra (nota de 0 a 100, classificação quente/morno/frio) e sugere uma resposta de follow-up para o vendedor.
+Qualificador inteligente de leads para pequenas empresas. O lead preenche um formulário, a IA avalia o potencial de compra (nota de 0 a 100, classificação quente/morno/frio) e sugere uma resposta de follow-up para o vendedor. 
 
 **Trabalho de Inteligência Artificial · FAETERJ Barra Mansa · Professor Vinicius**
 **Trio:** [Isabele Souza] e [Yasmin Sanglard]
 
-🔗 **Aplicação:** [link da Vercel]
+🔗 **Aplicação:** (https://prova-n20u0pdn4-bele.vercel.app/)
 🔗 **Repositório:** (https://github.com/yasminSanglard02/Prova_IA.git) 
 
 ## O problema
