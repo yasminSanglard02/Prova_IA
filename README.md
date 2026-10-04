@@ -3,7 +3,7 @@
 Qualificador inteligente de leads para pequenas empresas. O lead preenche um formulário, a IA avalia o potencial de compra (nota de 0 a 100, classificação quente/morno/frio) e sugere uma resposta de follow-up para o vendedor.
 
 **Trabalho de Inteligência Artificial · FAETERJ Barra Mansa · Professor Vinicius**
-**Trio:** [Isabele Souza], [Guilherme Nunes] e [Yasmin Sanglard]
+**Trio:** [Isabele Souza] e [Yasmin Sanglard]
 
 🔗 **Aplicação:** [link da Vercel]
 🔗 **Repositório:** (https://github.com/yasminSanglard02/Prova_IA.git) 
@@ -83,9 +83,8 @@ O arquivo `.env.local` não vai para o GitHub.
 - **Tabela de análises separada** para manter o histórico.
 
 ## Divisão do trabalho
-- **Isabele Souza:** banco de dados (schema Drizzle e Neon), rota `POST /api/leads` e testes com o seed.
-- **Yasmin Sanglard:** integração com a IA (`analisarLead.ts`), prompt do classificador, rota `POST /api/analisar/[leadId]` e tratamento de erros.
-- **Guilherme Nunes:** formulário, painel de leads, deploy na Vercel e documentação (README e relatório).
+- **[Yasmin Sanglard]:** banco de dados (schema Drizzle e Neon), rotas de API, integração com a IA e prompt do classificador.
+- **[Isabele Souza]:** formulário, painel de leads, deploy na Vercel e documentação (README e relatório).
 
 ## Como usamos IA no desenvolvimento
 [Claude e Use.ia auxiliaram]
